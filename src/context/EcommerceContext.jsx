@@ -21,7 +21,7 @@ export const EcommerceProvider = ({children}) =>{
         //console.log(data.results);
     }
     
-    return <EcommerceContext.Provider value={{products, agregarAlCarrito, carrito, getData}}>
+    return <EcommerceContext.Provider value={{products, agregarAlCarrito, carrito, getData, setProducts}}>
         {children}
     </EcommerceContext.Provider>
 }
