@@ -8,7 +8,7 @@ const CardComponent = ({product, agregarAlCarrito}) =>{
             <div className="card-body">
               <h5 className="card-title fs-6">{product.title}</h5>
               <p className="card-text"></p>
-              <button className="btn btn-primary" onClick={(event)=>{agregarAlCarrito(event, product)}}>Agregar al carrito</button>
+              <button className="btn btn-primary fs-6" onClick={(event)=>{agregarAlCarrito(event, product)}}>Agregar al carrito</button>
             </div>
           </div>
         </div>
