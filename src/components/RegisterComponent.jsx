@@ -3,16 +3,23 @@ import './style.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { Formik } from "formik";
 import * as Yup from 'yup';
+import { useState } from "react";
 
 const RegisterSchema = Yup.object().shape({
-    name: Yup.string().required('Este campo es obligatorio'),
+    name: Yup.string().required('Este campo es obligatorio').matches(/^[A-Za-z]+$/,'Solo debe incluir letras'),
     id: Yup.number().required('Este campo es obligatorio').typeError('Sólo ingrese números').min(30000000, 'El documento debe ser mayor a 30 millones'),
     phone: Yup.number().typeError('Sólo ingrese números'),
     email: Yup.string().email('Correo inválido').required('Este campo es obligatorio'),
-    password: Yup.string().required('Este campo es obligatorio').min(8, 'Debe tener al menos 8 caracteres').matches(/^(?=(?:.*\d))(?=.*[A-Z])(?=.*[a-z])(?=.*[.,*!?¿¡/#$%&])\S{8,64}$/,'Debe tener al entre 8 y 16 caracteres, al menos un dígito, al menos una minúscula, al menos una mayúscula y al menos un caracter no alfanumérico.'),
+    password: Yup.string().required('Este campo es obligatorio').min(8, 'Debe tener al menos 8 caracteres').matches(/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$^&*()_-]).{8,18}$/,'Debe incluir al menos un número, al menos una letra minúscula, al menos una letra mayúscula y al menos un carácter especial.'),
+    verifyPassword: Yup.string()
+        .required('Este campo es obligatorio')
+        .oneOf([Yup.ref('password')],'Las contraseñas no coinciden')
 })
 
 const RegisterComponent = () =>{
+
+    const [visible, setVisible] = useState(false);
+
     return(
         <div>
             <h3 className="mt-5 text-white">Registrate</h3>
@@ -49,8 +56,18 @@ const RegisterComponent = () =>{
                                     {errors.email && <p className="error-name">{errors.email}</p>}
                                 </div>
                                 <div className="form-group mb-2">
-                                    <input type="password" name='password' className="form-control" placeholder="Creá tu contraseña" onChange={handleChange('password')} value={values.password} />
+                                    <input type={visible ? "text" : "password"} name='password' className="form-control" placeholder="Creá tu contraseña" onChange={handleChange('password')} value={values.password} />
                                     {errors.password && <p className="error-name">{errors.password}</p>}
+                                </div>
+                                <div className="form-group mb-2">
+                                    <input type={visible ? "text" : "password"} name='verifyPassword' className="form-control" placeholder="Volvé a ingresar la contraseña" onChange={handleChange('verifyPassword')} value={values.verifyPassword} />
+                                    {errors.verifyPassword && <p className="error-name">{errors.verifyPassword}</p>}
+                                    <div className="form-check text-start mt-1">
+                                        <input className="form-check-input" type="checkbox" value="" id="flexCheckDefault" onChange={()=>setVisible(!visible)}/>
+                                        <label className="form-check-label" for="flexCheckDefault">
+                                           {visible ? "Ocultar contraseña" : "Mostrar contraseña"}
+                                        </label>
+                                    </div>
                                 </div>
                                 <button type="button" className="btn btn-danger m-2">Registrarse</button>
                             </div>      
