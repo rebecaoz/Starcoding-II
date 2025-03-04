@@ -1,15 +1,17 @@
 import DetailComponent from "../components/DetailComponent"
 import {useParams} from "react-router-dom";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
+import { EcommerceContext } from "../context/EcommerceContext";
 
 
 const DetailContainer = () =>{
-    const params = useParams();
+    const {id} = useParams();
     const [product, setProduct] = useState(null);
-
+    const {products} = useContext(EcommerceContext);
+    /*
     useEffect (()=> {
         async function fetchData(){
-            const response = await fetch(`https://api.mercadolibre.com/items/${params.id}`);
+            const response = await fetch(`https://api.mercadolibre.com/items/${id}`);
             const data = await response.json();
             console.log(data);
             setProduct(data);
@@ -20,6 +22,12 @@ const DetailContainer = () =>{
         
        
     },[params.id])
+    */
+    useEffect(()=>{
+            let product= products.filter(element=>element.id===id)
+            //console.log(product);
+            setProduct(product[0]);
+    },[id, products])
 
     return(
         <DetailComponent producto={product}/>

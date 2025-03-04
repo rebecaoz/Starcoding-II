@@ -1,9 +1,9 @@
-import { useContext, useEffect, useState } from "react";
-import CardComponent from "../components/CardComponent";
+import { lazy, Suspense, useContext, useEffect, useState } from "react";
 import InfoBarComponent from "../components/InfoBarComponent";
 import { EcommerceContext } from "../context/EcommerceContext";
 import { useParams } from "react-router-dom";
 
+const CardComponent = lazy(()=> import('../components/CardComponent'));
 
 const CardContainer = () =>{
     
@@ -13,7 +13,7 @@ const CardContainer = () =>{
 
     useEffect(() => {
         getData(busqueda);
-    }, [busqueda]);
+    }, [busqueda, getData]);
 
     // Actualizar productos filtrados cuando cambian los productos de la API
     useEffect(() => {
@@ -37,7 +37,9 @@ const CardContainer = () =>{
             <div className="row row-cols row-cols-md-4 g-4">
                 {filteredProducts.map(element=>{
                     return(
-                        <CardComponent product={element} img= {element.img} key={element.id} agregarAlCarrito={agregarAlCarrito}/>
+                        <Suspense fallback={<div>Cargando...</div>}>
+                            <CardComponent product={element} img= {element.img} key={element.id} agregarAlCarrito={agregarAlCarrito}/>
+                        </Suspense>
                     )
                 })}
                 
